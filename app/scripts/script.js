@@ -9,6 +9,12 @@ function $(e) {
   return document.querySelectorAll(e)[1] === undefined ? document.querySelector(e) : document.querySelectorAll(e)
 }
 
+function addEventListener(element, events, handler) {
+  events.trim().split(" ").forEach(event => {
+    element.addEventListener(event, handler);
+  });
+}
+
 Array.prototype.shuffle = function() {
     for (let i = this.length; i; i--) {
         let j = Math.floor(Math.random() * i);
@@ -124,7 +130,9 @@ function initStacks() {
       el.appendChild(newEl)
     }
 
-    el.addEventListener("mouseup", function() {
+    addEventListener(el, "mouseup touchend", function() {
+      console.log('[selectedElements]', selectedElements);
+
       if (typeof selectedElements[0] !== "undefined") {
         onDrop(this)
       }
@@ -174,7 +182,7 @@ function _moveElement(element, toParent, toFront = false) {
 
 function initDragAndDrop() {
   for (let cardsEl of $(".card")) {
-    cardsEl.addEventListener("mousedown", function(e) {
+    addEventListener(cardsEl, "mousedown touchstart", function(e) {
       offsetX = e.offsetX
       offsetY = e.offsetY
       if (this.parentNode.lastChild == this) {
@@ -196,7 +204,7 @@ function initDragAndDrop() {
 
   document.addEventListener("dblclick", autoMove)
 
-  document.addEventListener("mouseup", function() {
+  addEventListener(document, "mouseup touchend", function() {
     if (typeof selectedElements[0] !== undefined) {
       for (let el of selectedElements) {
         el.style.top = "auto"
@@ -206,7 +214,7 @@ function initDragAndDrop() {
     _rmSelectedElements()
   })
 
-  document.addEventListener("mousemove", function() {
+  addEventListener(document, "mousemove touchmove", function() {
     if (typeof selectedElements[0] !== undefined) {
       for (let el of selectedElements) {
         el.style.top = event.clientY - offsetY + "px"
@@ -216,7 +224,7 @@ function initDragAndDrop() {
   })
   
   for (let el of $(".foundations")) {
-    el.addEventListener("mouseup", function() {
+    addEventListener(el, "mouseup touchend", function() {
       onDrop(this)
     })
   }

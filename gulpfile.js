@@ -6,12 +6,6 @@ var gulp = require('gulp'),
 	uglify = require('gulp-uglify'),
 	browserSync = require('browser-sync');
 
-gulp.task('default', ['serve'], function () {
-	gulp.watch('app/*.html', ['html']).on('change', browserSync.reload);
-	gulp.watch("app/scripts/*.js", ['babel']).on('change', browserSync.reload);
-	gulp.watch('app/styles/**/*.scss', ['sass']);
-});
-
 gulp.task('html', function() {
 	return gulp.src('app/index.html')
 		.pipe(gulp.dest('dist/'));
@@ -48,4 +42,10 @@ gulp.task('serve', function() {
 	});
 });
 
-gulp.task('dist', ['html', 'babel', 'sass']);
+gulp.task('dist', gulp.series('html', 'babel', 'sass'));
+
+gulp.task('default', gulp.series('serve'), function () {
+	gulp.watch('app/*.html', ['html']).on('change', browserSync.reload);
+	gulp.watch("app/scripts/*.js", ['babel']).on('change', browserSync.reload);
+	gulp.watch('app/styles/**/*.scss', ['sass']);
+});
