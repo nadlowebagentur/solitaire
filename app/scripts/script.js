@@ -198,6 +198,8 @@ function updateElementPosition(element, event) {
 function initDragAndDrop() {
     for (let cardsEl of $(".card")) {
         attachEventListener(cardsEl, "mousedown touchstart", function (e) {
+            e.stopPropagation();
+
             const rect = e.target.getBoundingClientRect();
 
             offsetX = e.touches ? (e.touches[0].clientX - rect.left) : e.offsetX;
@@ -227,6 +229,8 @@ function initDragAndDrop() {
     })
 
     attachEventListener(document, "mousemove touchmove", function (ev) {
+        ev.stopPropagation();
+
         if (typeof selectedElements[0] !== undefined) {
             for (let el of selectedElements) {
                 updateElementPosition(el, ev);
@@ -241,6 +245,9 @@ function initDragAndDrop() {
     }
 
     attachEventListener(document, "touchend", function (event) {
+        event.stopPropagation();
+
+
         const {pageX, pageY} = event.changedTouches[0];
 
         const acceptableSelectors = ['foundations', 'stack'];
